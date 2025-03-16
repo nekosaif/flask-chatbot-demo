@@ -19,11 +19,15 @@ jobs:
           heroku apps:create flask-chatbot-demo || true
           heroku git:remote -a flask-chatbot-demo
 
+      - name: Ensure Heroku remote is set
+        run: git remote add heroku https://github.com/nekosaif/flask-chatbot-demo.git || true
+
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "flask-chatbot-demo"
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          dontuseforce: 1
+          # Remove or set dontuseforce to 0 if a force push is acceptable
+          # dontuseforce: 1
           healthcheck: "https://flask-chatbot-demo.herokuapp.com/health"
