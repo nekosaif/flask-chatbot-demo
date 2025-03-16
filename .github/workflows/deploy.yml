@@ -2,32 +2,30 @@ name: Deploy to Heroku
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main  # Change if your deployment branch is different
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Heroku CLI
-        run: curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
 
-      - name: Create Heroku App
+      - name: Install dependencies
         run: |
-          heroku apps:create flask-chatbot-demo || true
-          heroku git:remote -a flask-chatbot-demo
-
-      - name: Ensure Heroku remote is set
-        run: git remote add heroku https://git.heroku.com/flask-chatbot-demo.git || true
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "flask-chatbot-demo"
+          heroku_app_name: "flask-chatbot-demo"  # Replace with your Heroku app name
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
-          # Remove or set dontuseforce to 0 if a force push is acceptable
-          # dontuseforce: 1
-          healthcheck: "https://flask-chatbot-demo.herokuapp.com/health"
