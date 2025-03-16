@@ -3,7 +3,7 @@ import requests
 import os
 
 app = Flask(__name__)
-API_ENDPOINT = "https://langchain-chatbot-6fpc.onrender.com/ask"
+API_ENDPOINT = os.getenv('BACKEND_URL')
 
 @app.route('/')
 def home():
@@ -13,19 +13,12 @@ def home():
 def ask_question():
     try:
         question = request.json.get('question')
-        if not question:
-            return jsonify({"error": "No question provided"}), 400
-            
         response = requests.post(
             API_ENDPOINT,
             json={"question": question},
             timeout=10
         )
-        
-        if response.status_code == 200:
-            return jsonify(response.json())
-        return jsonify({"error": "API request failed"}), 500
-        
+        return jsonify(response.json())
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
