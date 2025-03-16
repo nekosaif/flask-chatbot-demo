@@ -20,7 +20,7 @@ jobs:
           heroku git:remote -a flask-chatbot-demo
 
       - name: Ensure Heroku remote is set
-        run: git remote add heroku https://github.com/nekosaif/flask-chatbot-demo.git || true
+        run: git remote add heroku https://git.heroku.com/flask-chatbot-demo.git || true
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
