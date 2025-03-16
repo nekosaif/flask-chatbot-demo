@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install Heroku CLI
+        run: curl https://cli-assets.heroku.com/install.sh | sh
+
       - name: Create Heroku App
         run: |
           heroku apps:create flask-chatbot-demo || true
